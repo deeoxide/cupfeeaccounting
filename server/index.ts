@@ -17,7 +17,11 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files from the React app build
-const clientDistPath = path.resolve(__dirname, '../../client/dist');
+const clientDistPath = process.env.NODE_ENV === 'production' 
+  ? path.resolve(__dirname, '../../client/dist')
+  : path.resolve(__dirname, '../client/dist');
+
+console.log(`[Server] Environment: ${process.env.NODE_ENV || 'development'}`);
 console.log(`[Server] Static files path: ${clientDistPath}`);
 app.use(express.static(clientDistPath));
 
