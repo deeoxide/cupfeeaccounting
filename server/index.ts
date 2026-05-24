@@ -18,6 +18,7 @@ app.use(express.json());
 
 // Serve static files from the React app build
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
+console.log(`[Server] Static files path: ${clientDistPath}`);
 app.use(express.static(clientDistPath));
 
 // Health check endpoint
@@ -33,13 +34,14 @@ app.get('/api/accounts', (req: Request, res: Response) => {
 
 // The "catch-all" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*any', (req: Request, res: Response) => {
-  res.sendFile('index.html', { root: clientDistPath });
+// Using regex for maximum compatibility in Express 5
+app.get(/^(?!\/api).+/, (req: Request, res: Response) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
 app.listen(Number(PORT), HOST, () => {
   console.log(`🚀 SME Cloud Accounting Server is running!`);
-  console.log(`   - Local:  http://localhost:${PORT}`);
-  console.log(`   - Global: http://[Your-Server-IP]:${PORT}`);
+  console.log(`   - Port:   ${PORT}`);
+  console.log(`   - Host:   ${HOST}`);
   console.log(`   - Mode:   HTTP (No SSL)`);
 });
