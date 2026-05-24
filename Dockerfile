@@ -1,17 +1,17 @@
 # Stage 1: Build the React Frontend
 FROM node:24-alpine AS client-builder
 WORKDIR /app/client
-COPY client/package*.json ./
+COPY ./client/package*.json ./
 RUN npm install
-COPY client/ ./
+COPY ./client/ ./
 RUN npm run build
 
 # Stage 2: Build the Express Backend
 FROM node:24-alpine AS server-builder
 WORKDIR /app/server
-COPY server/package*.json ./
+COPY ./server/package*.json ./
 RUN npm install
-COPY server/ ./
+COPY ./server/ ./
 # We need to build the TypeScript server
 RUN npm run build
 
